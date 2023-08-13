@@ -1,0 +1,27 @@
+CS626 - NLP
+Assignment - POS tagging using word vectors
+- Harshvardhan Ahirwar,	200050051
+- Sohom Mandal,		200050136
+- Advait Padhye,	200100014
+
+
+There are 3 .ipynb code files in the "code" directory, one each for the HMM-Viterbi-Symbolic, HMM-Viterbi-Vector, and FFNN-BP techniques for POS tagging, and one folder named "final_model", which contains a pre-trained FFNN model.
+
+Requirements :-
+numpy,
+nltk,
+tensorflow,  
+sklearn,
+gensim
+
+The HMM-Viterbi-Vector model uses the HMM-Viterbi technique for POS tagging, and makes use of vector similarity on top of it for unknown word handling. 
+So, we intend to find a word which is in the training corpus, and is the most similar to the unknown word according to an external dataset. For this purpose, we have utilised the gensim's "word2vec-google-news-300" word2vec model. 
+If the unknown word exists in this google word2vec model, then we find the most similar word directly and use it's emission probability as the unknown word's emission probability, else we just apply Laplace smoothing.
+
+The FFNN-BP model uses a Feed Forward Neural Net for generating a tag for a word, which is passed along with a few more words in a defined window_size around the word. We train a Word2Vec model named brown_wvmodel, over the training corpus for generating the vectors to be feeded to the neural net. Now this neural net is trained over the training corpus by converting each word into a context block (using brown_wvmodel), which contains a context along with the word for tagging.
+During manual testing, we transform the input into this context block form by the transform_w2v_test function. This function basically checks if the word has a vector in brown_wvmodel, and uses it directly for the context block, and if it does not exist, then it performs unknown word handling.
+For unknown word handling, if the word exists in google_wvmodel, then we find the word most similar to it in brown_wvmodel, according to google_wvmodel, and use that word vector directly, otherwise we assign some random vector to it.
+
+The FFNN-BP model takes a lot of time to train. So, we have provided a pre-trained model which is present in the "final_model" folder. You need to give appropriate file path in the 'Load a saved Tensorflow Model' block of the notebook, and run the blocks other than the ones which are marked for running only for K-fold validation or Tensorflow model generation. Then you can use the pre-trained model for making predictions.
+
+Thank you for taking your time to read this piece of work !
